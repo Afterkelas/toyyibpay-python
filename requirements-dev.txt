@@ -1,0 +1,44 @@
+# Testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+pytest-timeout>=2.1.0
+pytest-xdist>=3.0.0  # For parallel test execution
+
+# Code Quality
+black>=23.0.0
+isort>=5.12.0
+flake8>=6.0.0
+flake8-docstrings>=1.7.0
+flake8-bugbear>=23.0.0
+mypy>=1.0.0
+types-python-dateutil>=2.8.0
+
+# Documentation
+sphinx>=5.0.0
+sphinx-rtd-theme>=1.2.0
+sphinx-autodoc-typehints>=1.22.0
+
+# Development Tools
+pre-commit>=3.0.0
+tox>=4.0.0
+twine>=4.0.0  # For PyPI uploads
+build>=0.10.0  # For building distributions
+ipython>=8.0.0
+ipdb>=0.13.0
+
+# Testing Utilities
+factory-boy>=3.2.0
+faker>=18.0.0
+responses>=0.23.0  # For mocking HTTP requests
+freezegun>=1.2.0  # For mocking time
+
+# Database Testing
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+alembic>=1.9.0
+
+# Performance Testing
+pytest-benchmark>=4.0.0
+locust>=2.0.0  # For load testing
