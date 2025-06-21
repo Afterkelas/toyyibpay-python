@@ -98,10 +98,6 @@ search:
 #   "old-page.html": "new-page.html"
 #   "api/v1/*": "api/v2/$rest"
 
-# Privacy level
-# Control the privacy level of your documentation
-privacy_level: public  # or "private" for private projects
-
 # Analytics
 # Disable analytics if you don't want Read the Docs analytics
 # analytics:
