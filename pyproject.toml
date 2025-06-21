@@ -31,6 +31,8 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -42,7 +44,7 @@ dependencies = [
     "httpx>=0.24.0",
     "pydantic>=2.0.0",
     "python-dateutil>=2.8.0",
-    "typing-extensions>=4.0.0; python_version <= '3.10'",
+    "typing-extensions>=4.0.0; python_version < '3.10'",
 ]
 
 [project.optional-dependencies]
@@ -57,6 +59,8 @@ dev = [
     "mypy>=1.0.0",
     "pre-commit>=3.0.0",
     "tox>=4.0.0",
+    "factory-boy>=3.2.0",
+    "faker>=18.0.0",
 ]
 postgres = [
     "sqlalchemy>=2.0.0",
@@ -69,15 +73,25 @@ flask = [
 fastapi = [
     "fastapi>=0.100.0",
 ]
+all = [
+    "toyyibpay[postgres,flask,fastapi]",
+]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/toyyibpay-python"
+Homepage = "https://github.com/waizwafiq/toyyibpay-python"
 Documentation = "https://toyyibpay-python.readthedocs.io"
-Repository = "https://github.com/yourusername/toyyibpay-python.git"
-"Bug Tracker" = "https://github.com/yourusername/toyyibpay-python/issues"
+Repository = "https://github.com/waizwafiq/toyyibpay-python.git"
+"Bug Tracker" = "https://github.com/waizwafiq/toyyibpay-python/issues"
+Changelog = "https://github.com/waizwafiq/toyyibpay-python/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
 packages = ["toyyibpay"]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["toyyibpay*"]
+exclude = ["tests*", "docs*", "examples*"]
 
 [tool.setuptools.package-data]
 toyyibpay = ["py.typed"]
