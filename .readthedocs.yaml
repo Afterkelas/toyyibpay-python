@@ -1,0 +1,131 @@
+# Read the Docs configuration file for ToyyibPay Python SDK
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required: Specify the version of the config file format
+version: 2
+
+# Build documentation in the docs/ directory with Sphinx
+sphinx:
+  # Path to the Sphinx configuration file relative to the repository root
+  configuration: docs/conf.py
+  
+  # Fail the build if there are any warnings
+  # This ensures documentation quality and catches broken references
+  fail_on_warning: true
+
+# Build formats
+# Generate HTML, PDF, and ePub versions of the documentation
+formats:
+  - html
+  - pdf
+  - epub
+
+# Operating system and build tools version
+build:
+  # Use Ubuntu 22.04 LTS for stable, modern build environment
+  os: ubuntu-22.04
+  
+  # Build tools versions
+  tools:
+    # Use Python 3.11 as the default version for documentation builds
+    # This provides good compatibility while using modern Python features
+    python: "3.11"
+    
+    # You can also specify other tools if needed:
+    # nodejs: "18"
+    # rust: "1.70"
+  
+  # APT packages to install
+  # Uncomment and add packages if your documentation needs system dependencies
+  # apt_packages:
+  #   - graphviz  # For dependency graphs
+  #   - plantuml  # For UML diagrams
+  
+  # Build jobs to run before/after the main build
+  # jobs:
+  #   pre_create_environment:
+  #     - echo "Setting up build environment"
+  #   post_install:
+  #     - echo "Post-install setup complete"
+
+# Python environment configuration
+python:
+  # Install the package in editable mode with documentation dependencies
+  install:
+    # Install the package itself in editable mode
+    # This allows Sphinx autodoc to properly import and document the code
+    - method: pip
+      path: .
+      # Install with dev extras which includes all documentation dependencies
+      # (sphinx, sphinx-rtd-theme, sphinx-autodoc-typehints, etc.)
+      extra_requirements:
+        - dev
+    
+    # Alternative: If you need to install specific requirements files
+    # - requirements: docs/requirements.txt
+
+# Environment variables
+# Set any environment variables needed during the build
+# build:
+#   environment:
+#     TOYYIBPAY_ENVIRONMENT: "docs"
+
+# Submodules configuration
+# Include any git submodules if your project uses them
+submodules:
+  # Include all submodules, recursively
+  include: all
+  # Or exclude all submodules
+  # exclude: all
+  
+  # Set to true to recursively clone submodules
+  recursive: true
+
+# Search configuration
+search:
+  # Enable search functionality
+  # This is enabled by default but can be explicitly set
+  ranking:
+    # Boost search ranking for specific pages
+    # api/*: 2  # Boost API reference pages
+    # guides/*: 1.5  # Boost guide pages
+    
+  # Ignore specific pages from search indexing
+  ignore:
+    - search.html
+    - search/
+    - 404.html
+
+# Redirect configuration
+# Set up URL redirects for moved or renamed pages
+# redirects:
+#   # Redirect old URLs to new ones
+#   "old-page.html": "new-page.html"
+#   "api/v1/*": "api/v2/$rest"
+
+# Privacy level
+# Control the privacy level of your documentation
+privacy_level: public  # or "private" for private projects
+
+# Analytics
+# Disable analytics if you don't want Read the Docs analytics
+# analytics:
+#   disabled: false
+
+# Notification configuration
+# Configure build notifications
+# notifications:
+#   webhooks:
+#     - url: https://example.com/webhooks/readthedocs
+#       payload: json
+
+# Build pull requests
+# Enable building documentation for pull requests
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.11"
+  
+  # Build pull requests to preview documentation changes
+  # This is useful for reviewing documentation updates before merging
+  # preview: true
