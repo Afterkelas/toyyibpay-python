@@ -14,9 +14,10 @@ sphinx:
   fail_on_warning: true
 
 # Build formats
-# Generate HTML, PDF, and ePub versions of the documentation
+# Generate HTMLZip, PDF, and ePub versions of the documentation
+# Note: HTML is always built by default, htmlzip creates a downloadable archive
 formats:
-  - html
+  - htmlzip
   - pdf
   - epub
 
