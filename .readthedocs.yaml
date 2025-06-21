@@ -84,13 +84,7 @@ submodules:
 
 # Search configuration
 search:
-  # Enable search functionality
-  # This is enabled by default but can be explicitly set
-  ranking:
-    # Boost search ranking for specific pages
-    # api/*: 2  # Boost API reference pages
-    # guides/*: 1.5  # Boost guide pages
-    
+  # Enable search functionality (enabled by default)
   # Ignore specific pages from search indexing
   ignore:
     - search.html
@@ -119,14 +113,3 @@ privacy_level: public  # or "private" for private projects
 #   webhooks:
 #     - url: https://example.com/webhooks/readthedocs
 #       payload: json
-
-# Build pull requests
-# Enable building documentation for pull requests
-build:
-  os: ubuntu-22.04
-  tools:
-    python: "3.11"
-  
-  # Build pull requests to preview documentation changes
-  # This is useful for reviewing documentation updates before merging
-  # preview: true
