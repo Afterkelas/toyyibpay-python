@@ -7,7 +7,7 @@ import pytest
 import httpx
 
 import toyyibpay
-from toyyibpay.exceptions import ValidationError, NetworkError, RuntimeError
+from toyyibpay.exceptions import ValidationError, NetworkError
 from toyyibpay.enums import PaymentStatus, CORPORATE_BANKING_THRESHOLD
 
 
