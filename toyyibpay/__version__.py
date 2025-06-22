@@ -3,7 +3,7 @@
 __title__ = "toyyibpay"
 __description__ = "Official Python SDK for ToyyibPay Payment Gateway"
 __url__ = "https://github.com/waizwafiq/toyyibpay-python"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __version_info__ = tuple(int(i) for i in __version__.split("."))
 __author__ = "Waiz Wafiq"
 __author_email__ = "mwaizwafiq@gmail.com"
@@ -77,7 +77,7 @@ def check_version(required_version: str) -> bool:
 
 # Version compatibility information
 COMPATIBILITY = {
-    "0.1.0": {
+    "0.1.1": {
         "breaking_changes": [],
         "deprecations": [],
         "new_features": [

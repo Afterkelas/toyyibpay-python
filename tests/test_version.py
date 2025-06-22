@@ -79,14 +79,14 @@ class TestVersionInfo:
     def test_check_version_newer(self):
         """Test version check with newer required version."""
         assert check_version("99.0.0") is False
-        assert check_version("1.0.0") is False  # Assuming current is 0.1.0
+        assert check_version("1.0.0") is False  # Assuming current is 0.1.1
     
     @pytest.mark.unit
     def test_check_version_components(self):
         """Test version check handles different component comparisons."""
-        # Assuming current version is 0.1.0
+        # Assuming current version is 0.1.1
         assert check_version("0.0.9") is True   # Lower major
-        assert check_version("0.1.0") is True   # Equal
+        assert check_version("0.1.1") is True   # Equal
         assert check_version("0.1.1") is False  # Higher patch
         assert check_version("0.2.0") is False  # Higher minor
         assert check_version("1.0.0") is False  # Higher major
@@ -143,7 +143,7 @@ class TestVersionInfo:
         # Test with version strings of different lengths
         assert check_version("0") is True      # Should handle single digit
         assert check_version("0.1") is True    # Should handle two components
-        assert check_version("0.1.0") is True  # Should handle three components
+        assert check_version("0.1.1") is True  # Should handle three components
         
         # Very long version should be truncated to first 3 parts
         assert check_version("0.0.0.0.0") is True

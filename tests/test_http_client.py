@@ -47,7 +47,7 @@ class TestHTTPClient:
         http_client = HTTPClient(test_config)
         headers = http_client._get_default_headers()
         
-        assert headers["User-Agent"] == "ToyyibPay-Python/0.1.0"
+        assert headers["User-Agent"] == "ToyyibPay-Python/0.1.1"
         assert headers["Accept"] == "application/json"
         assert headers["Content-Type"] == "application/x-www-form-urlencoded"
     
@@ -63,7 +63,7 @@ class TestHTTPClient:
         
         assert headers["X-Custom"] == "value"
         assert headers["X-Another"] == "header"
-        assert headers["User-Agent"] == "ToyyibPay-Python/0.1.0"
+        assert headers["User-Agent"] == "ToyyibPay-Python/0.1.1"
     
     @pytest.mark.unit
     def test_prepare_data(self, test_config):

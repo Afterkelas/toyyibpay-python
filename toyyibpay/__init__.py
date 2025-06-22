@@ -58,7 +58,7 @@ from .models import (
 from .webhooks.handler import WebhookHandler, create_webhook_response
 
 # Version
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 # Public API
 __all__ = [
