@@ -159,7 +159,7 @@ html_theme_options = {
     'titles_only': False,
     
     # For sphinx_book_theme (if used)
-    # 'repository_url': 'https://github.com/yourusername/toyyibpay-python',
+    # 'repository_url': 'https://github.com/mwaizwafiq/toyyibpay-python',
     # 'use_repository_button': True,
     # 'use_issues_button': True,
     # 'use_edit_page_button': True,
