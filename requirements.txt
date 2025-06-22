@@ -1,0 +1,14 @@
+# Core dependencies
+httpx>=0.24.0
+pydantic>=2.0.0
+python-dateutil>=2.8.0
+typing-extensions>=4.0.0; python_version <= '3.10'
+
+# Optional dependencies - uncomment as needed
+sqlalchemy>=2.0.0  # For database support
+psycopg2-binary>=2.9.0  # For PostgreSQL
+# alembic>=1.9.0  # For database migrations
+flask>=2.0.0  # For Flask integration
+fastapi>=0.100.0  # For FastAPI integration
+uvicorn>=0.20.0  # For ASGI server support
+flask_sqlalchemy>=2.5.0  # For Flask-SQLAlchemy integration
