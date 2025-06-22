@@ -38,7 +38,7 @@ class HTTPClient:
     def _get_default_headers(self) -> Dict[str, str]:
         """Get default headers for requests."""
         headers = {
-            "User-Agent": "ToyyibPay-Python/0.1.0",
+            "User-Agent": "ToyyibPay-Python/0.1.1",
             "Accept": "application/json",
             "Content-Type": "application/x-www-form-urlencoded",
         }
@@ -185,7 +185,7 @@ class AsyncHTTPClient:
     def _get_default_headers(self) -> Dict[str, str]:
         """Get default headers for requests."""
         headers = {
-            "User-Agent": "ToyyibPay-Python/0.1.0",
+            "User-Agent": "ToyyibPay-Python/0.1.1",
             "Accept": "application/json",
             "Content-Type": "application/x-www-form-urlencoded",
         }

@@ -14,7 +14,7 @@ from .models import (
 )
 from .enums import PaymentStatus, CORPORATE_BANKING_THRESHOLD
 from .exceptions import ValidationError
-from .utils import generate_ulid
+from .utils import generate_ulid, dict_to_form_data
 
 
 class AsyncToyyibPayClient:
@@ -140,10 +140,14 @@ class AsyncToyyibPayClient:
             **kwargs
         )
 
+        # Convert model to dict and ensure all values are properly formatted for form data
+        bill_dict = bill_data.model_dump(by_alias=True)
+        form_data = dict_to_form_data(bill_dict)
+
         # Send request
         response = await self._http_client.post(
             "createBill",
-            bill_data.model_dump(by_alias=True)
+            form_data
         )
 
         # Handle response

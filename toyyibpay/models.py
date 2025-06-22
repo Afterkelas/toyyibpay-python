@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Optional, Any, Dict
 from decimal import Decimal
 
-from pydantic import BaseModel, Field, EmailStr, field_validator, ConfigDict
+from pydantic import BaseModel, Field, EmailStr, field_validator, ConfigDict, field_serializer
 
 from .enums import (
     PaymentStatus,
@@ -124,6 +124,31 @@ class CreateBillInput(ToyyibPayModel):
                 "Only alphanumeric characters, space and underscore allowed"
             )
         return v
+
+    @field_serializer("bill_price_setting")
+    def serialize_price_setting(self, value: PriceVariable) -> int:
+        """Serialize PriceVariable enum to int."""
+        return int(value)
+
+    @field_serializer("bill_payor_info")
+    def serialize_payor_info(self, value: PayerInfo) -> int:
+        """Serialize PayerInfo enum to int."""
+        return int(value)
+
+    @field_serializer("bill_payment_channel")
+    def serialize_payment_channel(self, value: PaymentChannel) -> int:
+        """Serialize PaymentChannel enum to int."""
+        return int(value)
+
+    @field_serializer("bill_charge_to_customer")
+    def serialize_charge_to_customer(self, value: ChargeParty) -> int:
+        """Serialize ChargeParty enum to int."""
+        return int(value)
+
+    @field_serializer("charge_fpx_b2b")
+    def serialize_charge_fpx_b2b(self, value: ChargeParty) -> int:
+        """Serialize ChargeParty enum to int."""
+        return int(value)
 
 
 class BillResponse(ToyyibPayModel):
