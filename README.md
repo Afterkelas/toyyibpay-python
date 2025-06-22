@@ -8,10 +8,10 @@ A modern, easy-to-use Python SDK for integrating with ToyyibPay payment gateway.
 - 🔒 Full type hints support
 - ⚡ Async/await support
 - 🛡️ Comprehensive error handling
-- 🔧 Easy integration with Flask, FastAPI, and Django
+- 🔧 Easy integration with Flask and FastAPI
 - 📊 Built-in webhook handling
 - 🗄️ Optional database integration (PostgreSQL first, MySQL/MongoDB coming soon)
-- 🧪 Well-tested and production-ready
+- 🧪 Well-tested ~~and production-ready~~ (nvm not production-ready yet till v1.0.0)
 
 ## Installation
 
@@ -33,6 +33,19 @@ pip install toyyibpay[fastapi]
 
 # For everything
 pip install toyyibpay[all]
+```
+
+### Development Installation
+
+For development with tests and documentation:
+
+```bash
+# Clone the repository
+git clone https://github.com/waizwafiq/toyyibpay-python.git
+cd toyyibpay-python
+
+# Install in editable mode with dev dependencies
+pip install -e ".[dev]"
 ```
 
 ## Quick Start
@@ -303,13 +316,64 @@ category = client.create_category(
 - `TOYYIBPAY_CALLBACK_URL`: Default callback URL
 - `DATABASE_URL`: PostgreSQL connection string (optional)
 
+## Development
+
+### Running Tests
+
+```bash
+# Install dev dependencies
+pip install -e .[dev]
+
+# Run tests
+pytest
+
+# Run with coverage
+pytest --cov=toyyibpay
+```
+
+### Code Style
+
+```bash
+# Format code
+black toyyibpay tests
+
+# Sort imports
+isort toyyibpay tests
+
+# Type checking
+mypy toyyibpay
+```
+
+## Testing
+
+Tests are not included in the PyPI package but are available in the [GitHub repository](https://github.com/mwaizwafiq/toyyibpay-python).
+
+### Running Tests from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/mwaizwafiq/toyyibpay-python.git
+cd toyyibpay-python
+
+# Install with development dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Run with coverage
+pytest --cov=toyyibpay
+```
+
 ## Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. **Write tests for your changes**
+4. Ensure all tests pass (`pytest`)
+5. Commit your changes (`git commit -m 'Add some amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 
 ## Acknowledgments
