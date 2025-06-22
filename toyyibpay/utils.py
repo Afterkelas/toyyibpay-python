@@ -4,7 +4,7 @@ import time
 import random
 import string
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 from decimal import Decimal, ROUND_HALF_UP
 
 
@@ -212,5 +212,3 @@ def truncate_string(text: str, max_length: int, suffix: str = "...") -> str:
     
     return text[:max_length - len(suffix)] + suffix
 
-
-from typing import Union
