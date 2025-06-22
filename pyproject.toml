@@ -85,7 +85,6 @@ Repository = "https://github.com/waizwafiq/toyyibpay-python.git"
 Changelog = "https://github.com/waizwafiq/toyyibpay-python/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
-packages = ["toyyibpay"]
 include-package-data = true
 
 [tool.setuptools.packages.find]
