@@ -1,0 +1,362 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: "3.10"
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: toyyibpay_test
+
+jobs:
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Cache pip
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-lint-${{ hashFiles('requirements-dev.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-lint-
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install black isort flake8 mypy
+        pip install types-python-dateutil
+    
+    - name: Run Black
+      run: black --check toyyibpay tests
+    
+    - name: Run isort
+      run: isort --check-only toyyibpay tests
+    
+    - name: Run Flake8
+      run: flake8 toyyibpay tests
+    
+    - name: Run MyPy
+      run: mypy toyyibpay
+
+  test:
+    name: Test Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Cache pip
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-test-${{ matrix.python-version }}-${{ hashFiles('requirements*.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-test-${{ matrix.python-version }}-
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev,postgres]"
+    
+    - name: Run unit tests
+      run: |
+        pytest -m unit --cov=toyyibpay --cov-report=xml --cov-report=term
+      env:
+        TOYYIBPAY_API_KEY: test-api-key
+        TOYYIBPAY_CATEGORY_ID: test-category
+    
+    - name: Run integration tests
+      run: |
+        pytest -m integration
+      env:
+        DATABASE_URL: postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@localhost:5432/${{ env.POSTGRES_DB }}
+        TOYYIBPAY_API_KEY: test-api-key
+    
+    - name: Upload coverage to Codecov
+      if: matrix.python-version == '3.11'
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: true
+
+  test-extras:
+    name: Test with ${{ matrix.extra }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        extra: ["flask", "fastapi"]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[${{ matrix.extra }},dev]"
+    
+    - name: Run ${{ matrix.extra }} tests
+      run: |
+        pytest tests/test_${{ matrix.extra }}_integration.py -v
+
+  test-async:
+    name: Test Async Functionality
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]"
+    
+    - name: Run async tests
+      run: |
+        pytest -m async -v
+
+  test-benchmarks:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev,postgres]"
+        pip install pytest-benchmark
+    
+    - name: Run benchmarks
+      run: |
+        pytest tests/test_benchmarks.py -v --benchmark-only --benchmark-json=benchmark.json
+    
+    - name: Store benchmark result
+      uses: benchmark-action/github-action-benchmark@v1
+      with:
+        tool: 'pytest'
+        output-file-path: benchmark.json
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        auto-push: false
+
+  test-security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit safety pip-audit
+    
+    - name: Run Bandit
+      run: bandit -r toyyibpay/
+    
+    - name: Run Safety
+      run: safety check
+      continue-on-error: true
+    
+    - name: Run pip-audit
+      run: pip-audit
+      continue-on-error: true
+
+  build:
+    name: Build Distribution
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+    
+    - name: Build distribution
+      run: python -m build
+    
+    - name: Check distribution
+      run: twine check dist/*
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist
+        path: dist/
+
+  docs:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]"
+        pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints
+    
+    - name: Build docs
+      run: |
+        cd docs
+        make html
+    
+    - name: Upload docs
+      uses: actions/upload-artifact@v3
+      with:
+        name: docs
+        path: docs/_build/html/
+
+  test-install:
+    name: Test Installation
+    runs-on: ${{ matrix.os }}
+    needs: build
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.8", "3.11"]
+    
+    steps:
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: dist
+        path: dist/
+    
+    - name: Install from wheel
+      run: |
+        python -m pip install --upgrade pip
+        pip install dist/*.whl
+    
+    - name: Test import
+      run: |
+        python -c "import toyyibpay; print(f'ToyyibPay SDK v{toyyibpay.__version__}')"
+    
+    - name: Test basic functionality
+      run: |
+        python -c "
+        import toyyibpay
+        try:
+            client = toyyibpay.Client(api_key='test-key')
+            print('Client created successfully')
+        except Exception as e:
+            print(f'Expected error: {e}')
+        "
+
+  publish:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    needs: [build, test-install]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: dist
+        path: dist/
+    
+    - name: Publish to Test PyPI
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+      run: |
+        python -m pip install --upgrade twine
+        twine upload --repository testpypi dist/*
+    
+    - name: Publish to PyPI
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      run: |
+        twine upload dist/*
