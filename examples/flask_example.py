@@ -29,11 +29,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Configure ToyyibPay
-toyyibpay_client = toyyibpay.Client(
-    api_key=os.getenv('TOYYIBPAY_API_KEY'),
-    environment='production' if os.getenv('FLASK_ENV') == 'production' else 'dev',
-    category_id=os.getenv('TOYYIBPAY_CATEGORY_ID'),
-)
+toyyibpay_config = toyyibpay.ToyyibPayConfig.from_env()
+toyyibpay_client = toyyibpay.Client(config=toyyibpay_config)
 
 # Initialize webhook handler
 webhook_handler = WebhookHandler()
