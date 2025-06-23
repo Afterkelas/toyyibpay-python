@@ -150,14 +150,29 @@ class AsyncToyyibPayClient:
             form_data
         )
 
-        # Handle response
-        if not response.get("BillCode"):
+        # Handle response - ToyyibPay returns data in different formats
+        bill_code = None
+        
+        # Check if response is wrapped in 'data' array
+        if isinstance(response, dict) and "data" in response:
+            data = response["data"]
+            if isinstance(data, list) and len(data) > 0:
+                bill_code = data[0].get("BillCode")
+        # Check if BillCode is at top level
+        elif isinstance(response, dict):
+            bill_code = response.get("BillCode")
+        # Check if response is a list
+        elif isinstance(response, list) and len(response) > 0:
+            bill_code = response[0].get("BillCode")
+        
+        if not bill_code:
             raise ValidationError(f"Failed to create bill: {response}")
 
-        bill_response = BillResponse(bill_code=response["BillCode"])
+        bill_response = BillResponse(bill_code=bill_code)
         # Set proper payment URL based on environment
         bill_response.__dict__[
-            "payment_url"] = f"{self.config.base_url}/{bill_response.bill_code}"
+            "payment_url"
+        ] = f"{self.config.base_url}/{bill_response.bill_code}"
 
         return bill_response
 
