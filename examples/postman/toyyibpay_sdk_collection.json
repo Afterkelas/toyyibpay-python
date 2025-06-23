@@ -1,0 +1,666 @@
+{
+    "info": {
+        "_postman_id": "8076de1f-d266-417f-94f7-dc6738648101",
+        "name": "ToyyibPay Python SDK",
+        "description": "Complete Postman collection for ToyyibPay Python SDK including API endpoints, webhooks, and integration examples",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "1060453"
+    },
+    "item": [
+        {
+            "name": "ToyyibPay API",
+            "item": [
+                {
+                    "name": "Create Bill",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                            }
+                        ],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "userSecretKey",
+                                    "value": "{{api_key}}",
+                                    "description": "Your ToyyibPay API key"
+                                },
+                                {
+                                    "key": "categoryCode",
+                                    "value": "{{category_id}}",
+                                    "description": "Category code (12 characters)"
+                                },
+                                {
+                                    "key": "billName",
+                                    "value": "{{$randomUUID}}",
+                                    "description": "Bill name (max 30 chars, alphanumeric)"
+                                },
+                                {
+                                    "key": "billDescription",
+                                    "value": "Payment for Order 12345",
+                                    "description": "Bill description (max 100 chars, alphanumeric only)"
+                                },
+                                {
+                                    "key": "billPriceSetting",
+                                    "value": "1",
+                                    "description": "0=Variable, 1=Fixed"
+                                },
+                                {
+                                    "key": "billPayorInfo",
+                                    "value": "1",
+                                    "description": "0=Hide, 1=Show payer info"
+                                },
+                                {
+                                    "key": "billAmount",
+                                    "value": "10000",
+                                    "description": "Amount in cents (100.00 = 10000)"
+                                },
+                                {
+                                    "key": "billReturnUrl",
+                                    "value": "https://example.com/payment/return",
+                                    "description": "URL to redirect after payment"
+                                },
+                                {
+                                    "key": "billCallbackUrl",
+                                    "value": "https://example.com/webhooks/toyyibpay",
+                                    "description": "Webhook URL for payment notification"
+                                },
+                                {
+                                    "key": "billExternalReferenceNo",
+                                    "value": "ORD-{{$timestamp}}",
+                                    "description": "Your order/reference ID"
+                                },
+                                {
+                                    "key": "billTo",
+                                    "value": "John Doe",
+                                    "description": "Customer name"
+                                },
+                                {
+                                    "key": "billEmail",
+                                    "value": "john.doe@example.com",
+                                    "description": "Customer email"
+                                },
+                                {
+                                    "key": "billPhone",
+                                    "value": "0123456789",
+                                    "description": "Customer phone"
+                                },
+                                {
+                                    "key": "billSplitPayment",
+                                    "value": "0",
+                                    "description": "Enable split payment (0=No, 1=Yes)"
+                                },
+                                {
+                                    "key": "billPaymentChannel",
+                                    "value": "2",
+                                    "description": "0=FPX, 1=Card, 2=Both"
+                                },
+                                {
+                                    "key": "billContentEmail",
+                                    "value": "Thank you for your payment!",
+                                    "description": "Email content (optional)"
+                                },
+                                {
+                                    "key": "billChargeToCustomer",
+                                    "value": "0",
+                                    "description": "0=Charge to customer, 1=Charge to owner"
+                                },
+                                {
+                                    "key": "billExpiryDays",
+                                    "value": "3",
+                                    "description": "Bill expiry in days (1-100)"
+                                },
+                                {
+                                    "key": "enableFPXB2B",
+                                    "value": "0",
+                                    "description": "Enable corporate banking (0=No, 1=Yes)"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{toyyibpay_api_url}}/createBill",
+                            "host": [
+                                "{{toyyibpay_api_url}}"
+                            ],
+                            "path": [
+                                "createBill"
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Success Response",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "urlencoded",
+                                    "urlencoded": []
+                                },
+                                "url": {
+                                    "raw": "{{toyyibpay_api_url}}/createBill",
+                                    "host": [
+                                        "{{toyyibpay_api_url}}"
+                                    ],
+                                    "path": [
+                                        "createBill"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "[\n    {\n        \"BillCode\": \"abc123def\"\n    }\n]"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Bill Transactions",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                            }
+                        ],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "userSecretKey",
+                                    "value": "{{api_key}}",
+                                    "description": "Your ToyyibPay API key"
+                                },
+                                {
+                                    "key": "billCode",
+                                    "value": "{{bill_code}}",
+                                    "description": "Bill code from createBill response"
+                                },
+                                {
+                                    "key": "billpaymentStatus",
+                                    "value": "1",
+                                    "description": "Filter by status: 1=Success, 2=Pending, 3=Failed (optional)"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{toyyibpay_api_url}}/getBillTransactions",
+                            "host": [
+                                "{{toyyibpay_api_url}}"
+                            ],
+                            "path": [
+                                "getBillTransactions"
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Success Response",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "urlencoded",
+                                    "urlencoded": []
+                                },
+                                "url": {
+                                    "raw": "{{toyyibpay_api_url}}/getBillTransactions",
+                                    "host": [
+                                        "{{toyyibpay_api_url}}"
+                                    ],
+                                    "path": [
+                                        "getBillTransactions"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "[\n    {\n        \"billName\": \"Payment\",\n        \"billDescription\": \"Payment for Order #12345\",\n        \"billTo\": \"John Doe\",\n        \"billEmail\": \"john.doe@example.com\",\n        \"billPhone\": \"0123456789\",\n        \"billStatus\": \"1\",\n        \"billpaymentStatus\": \"1\",\n        \"billpaymentAmount\": \"100.00\",\n        \"billPaymentDate\": \"2024-03-20 14:30:00\",\n        \"billpaymentChannel\": \"FPX\",\n        \"billpaymentInvoiceNo\": \"INV123456\",\n        \"billExternalReferenceNo\": \"ORD-12345\",\n        \"billpaymentSettlement\": null,\n        \"settlementReferenceNo\": null,\n        \"billSplitPayment\": \"0\",\n        \"billSplitPaymentArgs\": null\n    }\n]"
+                        }
+                    ]
+                },
+                {
+                    "name": "Create Category",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                            }
+                        ],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "userSecretKey",
+                                    "value": "{{api_key}}",
+                                    "description": "Your ToyyibPay API key"
+                                },
+                                {
+                                    "key": "catname",
+                                    "value": "Online Store",
+                                    "description": "Category name"
+                                },
+                                {
+                                    "key": "catdescription",
+                                    "value": "Payments for online store",
+                                    "description": "Category description"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{toyyibpay_api_url}}/createCategory",
+                            "host": [
+                                "{{toyyibpay_api_url}}"
+                            ],
+                            "path": [
+                                "createCategory"
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Success Response",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "urlencoded",
+                                    "urlencoded": []
+                                },
+                                "url": {
+                                    "raw": "{{toyyibpay_api_url}}/createCategory",
+                                    "host": [
+                                        "{{toyyibpay_api_url}}"
+                                    ],
+                                    "path": [
+                                        "createCategory"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"CategoryCode\": \"abc123def456\"\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Webhook Callbacks",
+            "item": [
+                {
+                    "name": "Payment Success Callback",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                            }
+                        ],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "refno",
+                                    "value": "REF123456789",
+                                    "description": "Transaction reference number"
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "1",
+                                    "description": "Payment status (1=Success)"
+                                },
+                                {
+                                    "key": "reason",
+                                    "value": "",
+                                    "description": "Failure reason (empty for success)"
+                                },
+                                {
+                                    "key": "billcode",
+                                    "value": "abc123def",
+                                    "description": "Bill code"
+                                },
+                                {
+                                    "key": "order_id",
+                                    "value": "ORD-12345",
+                                    "description": "Your order ID"
+                                },
+                                {
+                                    "key": "amount",
+                                    "value": "10000",
+                                    "description": "Amount in cents"
+                                },
+                                {
+                                    "key": "transaction_time",
+                                    "value": "28-03-2024 14:30:00",
+                                    "description": "Transaction timestamp"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{your_webhook_url}}/webhooks/toyyibpay",
+                            "host": [
+                                "{{your_webhook_url}}"
+                            ],
+                            "path": [
+                                "webhooks",
+                                "toyyibpay"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Payment Failed Callback",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                            }
+                        ],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "refno",
+                                    "value": "",
+                                    "description": "Transaction reference (empty for failed)"
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "3",
+                                    "description": "Payment status (3=Failed)"
+                                },
+                                {
+                                    "key": "reason",
+                                    "value": "Customer cancelled the transaction",
+                                    "description": "Failure reason"
+                                },
+                                {
+                                    "key": "billcode",
+                                    "value": "abc123def",
+                                    "description": "Bill code"
+                                },
+                                {
+                                    "key": "order_id",
+                                    "value": "ORD-12345",
+                                    "description": "Your order ID"
+                                },
+                                {
+                                    "key": "amount",
+                                    "value": "10000",
+                                    "description": "Amount in cents"
+                                },
+                                {
+                                    "key": "transaction_time",
+                                    "value": "28-03-2024 14:30:00",
+                                    "description": "Transaction timestamp"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{your_webhook_url}}/webhooks/toyyibpay",
+                            "host": [
+                                "{{your_webhook_url}}"
+                            ],
+                            "path": [
+                                "webhooks",
+                                "toyyibpay"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Flask Integration Example",
+            "item": [
+                {
+                    "name": "Create Payment",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"0123456789\",\n    \"amount\": 100.50,\n    \"order_id\": \"ORD-{{$timestamp}}\",\n    \"description\": \"Payment for Order 12345\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{flask_host}}/api/payments/create",
+                            "host": [
+                                "{{flask_host}}"
+                            ],
+                            "path": [
+                                "api",
+                                "payments",
+                                "create"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Payment Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{flask_host}}/api/payments/{{order_id}}/status",
+                            "host": [
+                                "{{flask_host}}"
+                            ],
+                            "path": [
+                                "api",
+                                "payments",
+                                "{{order_id}}",
+                                "status"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{flask_host}}/health",
+                            "host": [
+                                "{{flask_host}}"
+                            ],
+                            "path": [
+                                "health"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "FastAPI Integration Example",
+            "item": [
+                {
+                    "name": "Create Payment",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Jane Smith\",\n    \"email\": \"jane.smith@example.com\",\n    \"phone\": \"0129876543\",\n    \"amount\": 250.00,\n    \"order_id\": \"ORD-{{$timestamp}}\",\n    \"description\": \"Premium subscription payment\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{fastapi_host}}/api/payments/create",
+                            "host": [
+                                "{{fastapi_host}}"
+                            ],
+                            "path": [
+                                "api",
+                                "payments",
+                                "create"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Payment Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{fastapi_host}}/api/payments/{{order_id}}/status",
+                            "host": [
+                                "{{fastapi_host}}"
+                            ],
+                            "path": [
+                                "api",
+                                "payments",
+                                "{{order_id}}",
+                                "status"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{fastapi_host}}/health",
+                            "host": [
+                                "{{fastapi_host}}"
+                            ],
+                            "path": [
+                                "health"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    ""
+                ]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    ""
+                ]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "api_key",
+            "value": "your-toyyibpay-api-key",
+            "type": "string"
+        },
+        {
+            "key": "category_id",
+            "value": "your-category-id",
+            "type": "string"
+        },
+        {
+            "key": "toyyibpay_api_url",
+            "value": "https://toyyibpay.com/index.php/api",
+            "type": "string"
+        },
+        {
+            "key": "toyyibpay_dev_url",
+            "value": "https://dev.toyyibpay.com/index.php/api",
+            "type": "string"
+        },
+        {
+            "key": "bill_code",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "order_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "flask_host",
+            "value": "http://localhost:5000",
+            "type": "string"
+        },
+        {
+            "key": "fastapi_host",
+            "value": "http://localhost:8000",
+            "type": "string"
+        },
+        {
+            "key": "your_webhook_url",
+            "value": "https://your-domain.com",
+            "type": "string"
+        }
+    ]
+}
